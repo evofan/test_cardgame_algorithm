@@ -52,7 +52,7 @@ function getCard() {
 }
 
 
-console.log("\n・ランダムに1枚のカードを引いていき、カードが0枚になるまで繰り返す");
+console.log("\n・ランダムに1枚のカードを引いていき、カードが0枚になるまで繰り返す（＋半分まで減った所でFisher-Yatesソートでシャッフル）");
 
 let card_ary = [];
 for (let i = 0; i <= max_card_num; i++) {
@@ -62,6 +62,7 @@ console.log(card_ary);
 
 let left_card_num = max_card_num;
 let left_ary = card_ary;
+let half_num = Math.floor(max_card_num / 2);
 
 //card_ary.map((ele, idx) => {
 //console.log("\nidx: ", idx);
@@ -80,7 +81,16 @@ for (let j = 0; j < max_card_num; j++) {
             left_card_num--;
             console.log(left_ary);
         }
-    })
+    });
+
+    if (j === half_num) {
+        console.log(`★${half_num}枚引いたので、再びシャッフル`);
+        //console.log(left_ary);
+        left_ary = changeArray(left_ary);
+        //console.log("↓");
+        //console.log(left_ary);
+        //console.log("\n");
+    }
 }
 //})
 
@@ -113,3 +123,30 @@ function getCard2(e, idx) {
         console.log(`数字は、${card}です`);
     }
 }
+
+/**
+ * Fisher-Yates sort
+ * @param { array } old ary 
+ * @returns { array } new ary
+ */
+function changeArray(e) {
+    let newArray = e.concat();
+    let i = newArray.length;
+    let j;
+    let temp;
+    while (i) {
+        j = Math.floor(Math.random() * i);
+        temp = newArray[--i];
+        newArray[i] = newArray[j];
+        newArray[j] = temp;
+    }
+    return newArray;
+}
+
+// "Fisher-Yates sort test"
+let org_ary = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+let result_ary = [];
+result_ary = changeArray(org_ary);
+console.log("\n- Fisher-Yates sort test -");
+console.log(org_ary + " ↓\n");
+console.log(result_ary + "\n"); // (10) [9, 2, 4, 0, 8, 3, 5, 6, 1, 7]
